@@ -1,0 +1,32 @@
+
+CREATE TABLE IF NOT EXISTS employee (
+	id SERIAL PRIMARY KEY,
+	surname VARCHAR(40) NOT NULL,
+	name VARCHAR(40) NOT NULL,
+	patronymic VARCHAR(40),
+	birth_year INTEGER NOT NULL CHECK (birth_year BETWEEN 1900 AND EXTRACT(YEAR FROM CURRENT_DATE)),
+	manager_id INTEGER REFERENCES employees(id) ON DELETE SET NULL
+);
+
+
+CREATE TABLE IF NOT EXISTS post (
+	id SERIAL PRIMARY KEY,
+	title VARCHAR(40) NOT NULL UNIQUE
+);
+
+
+CREATE TABLE IF NOT EXISTS division (
+	id SERIAL PRIMARY KEY,
+	title VARCHAR(40) NOT NULL UNIQUE
+);
+
+
+CREATE TABLE IF NOT EXISTS jobcard (
+	id SERIAL,
+	employee_id INTEGER REFERENCES employee(id),
+	post_id INTEGER REFERENCES post(id),
+	division_id INTEGER REFERENCES division(id),
+	CONSTRAINT pk PRIMARY KEY (employee_id, post_id, division_id)
+);
+
+
